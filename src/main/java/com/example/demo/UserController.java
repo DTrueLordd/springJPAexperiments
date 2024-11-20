@@ -2,6 +2,7 @@ package com.example.demo;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,14 +23,16 @@ import java.util.List;
 
 //дефолт, запросы обрабатываются по localhost:8080
 @RequestMapping
-
+@Scope("request")
 public class UserController {
     private final UserService userService;
     private final UserRepository userRepository;
+    private final ReqCheck reqCheck;
 
-    public UserController(UserService userService , UserRepository userRepository) {
+    public UserController(UserService userService , UserRepository userRepository, ReqCheck reqCheck) {
         this.userService = userService;
         this.userRepository = userRepository;
+        this.reqCheck = reqCheck;
     }
 
 
@@ -57,6 +60,9 @@ public class UserController {
          userService.addUser(user);
         return "Successfuly submitted your data";
     }
-
+    @GetMapping("/check")
+    public String checkRequest() {
+        return "Request check successful";
+    }
 }
 
